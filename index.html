@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Solver</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Maze Solver</h1>
+        <p>This page is designed to solve a maze using a variety of different algorithms.</p>
+        <form>
+            <fieldset>
+                <legend>Select your maze solving method:</legend>
+                <div>
+                    <input type="radio" id="randomMouse" name="solveMethod" value="randomMouseSolve" />
+                    <label for="randomMouse">Random Mouse</label>
+
+                    <input type="radio" id="bfs" name="solveMethod" value="bfsSolve" />
+                    <label for="bfs">BFS</label>
+
+                    <input type="radio" id="dfs" name="solveMethod" value="dfsSolve" />
+                    <label for="dfs">DFS</label>
+
+                    <input type="radio" id="flood" name="solveMethod" value="floodSolve" />
+                    <label for="flood">Flood</label>
+                </div>
+                <div>
+                    <button type="submit">Solve</button>
+                </div>
+            </fieldset>
+        </form>
+    </header>
+    <button id="generateMaze">Generate Maze</button>
+    <canvas id="mazeCanvas"></canvas>
+    <script src="mazeSolver.js"></script>
+</body>
+</html>
