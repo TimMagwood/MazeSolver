@@ -11,3 +11,13 @@ Pathfinding methods to try:
 [-] A*
 [-] Flood?
 [-] Hand-on-wall?
+[-] Hacking? Add easter egg to remove walls between start and end to solve maze via direct path.
+
+To Do:
+[] Maze Generation
+    [] Make maze generation dynamic based on user input
+    [] Allow user to click maze to set start and end points
+[] Maze Solving (various pathfinding methods)
+[] Animate Maze solving
+    [] Color cells as they are searched, then color correct path
+[] Auto-generate docs based on method header comments
