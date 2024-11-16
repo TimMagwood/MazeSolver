@@ -13,9 +13,12 @@ const canvasSize = 500;
 canvas.width = canvasSize;
 canvas.height = canvasSize;
 
-let grid = [];
+let grid;
 const gridSize = 20;
 const cellSize = canvasSize / gridSize;
+
+let start;
+let end;
 
 document.getElementById("generateMaze").addEventListener("click", createMaze);
 
@@ -23,6 +26,7 @@ document.getElementById("generateMaze").addEventListener("click", createMaze);
  * Creates a maze based on specified grid/canvas size.
  */
 function createMaze() {
+    grid = [];
     stack = [];
 
     for (let y = 0; y < gridSize; y++) {
@@ -34,7 +38,8 @@ function createMaze() {
         grid.push(row);
     }
 
-    let start = grid[0][0];
+    start = grid[0][0];
+    end = grid[gridSize - 1][gridSize - 1];
     stack.push(start);
     start.visited = true;
 
@@ -57,6 +62,8 @@ function createMaze() {
     }
 
     drawMaze();
+    drawCellDot(start, '#ff000080');
+    drawCellDot(end, '#0000ff80');
 }
 
 /**
@@ -111,7 +118,7 @@ function removeWall(current, next) {
  */
 function drawMaze() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    ctx.strokeStyle = '#000000';
     for (let y = 0; y < gridSize; y++) {
         for (let x = 0; x < gridSize; x++) {
           let cell = grid[y][x];
@@ -126,5 +133,17 @@ function drawMaze() {
           if (cell.walls[3]) { ctx.moveTo(xPos, yPos + cellSize); ctx.lineTo(xPos, yPos); } // left
           ctx.stroke();
         }
-      }
+    }
+}
+
+
+function drawCellDot(cell, rgbColor) {
+    ctx.beginPath();
+    let drawX = (cell.x * cellSize) + (cellSize / 2);
+    let drawY = (cell.y * cellSize) + (cellSize / 2);
+    ctx.arc(drawX, drawY, cellSize * 0.1, 0, 2 * Math.PI);
+    ctx.fillStyle = rgbColor;
+    ctx.fill()
+    ctx.strokeStyle = rgbColor;
+    ctx.stroke();
 }
