@@ -7,6 +7,7 @@
  */
 
 const canvas = document.getElementById("mazeCanvas");
+const mazeStatus = document.getElementById("mazeStatus");
 const ctx = canvas.getContext("2d");
 
 const canvasSize = 500;
@@ -26,6 +27,7 @@ document.getElementById("generateMaze").addEventListener("click", createMaze);
  * Creates a maze based on specified grid/canvas size.
  */
 function createMaze() {
+    mazeStatus.innerText = 'Generating maze.';
     grid = [];
     stack = [];
 

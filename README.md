@@ -9,6 +9,7 @@ To Do:
     [-] Make maze generation dynamic based on user input
     [-] Allow user to click maze to set start and end points
         [-] Mark start/end with dots
+    [-] Toggle for walls as cells/borders?
 [-] Maze Solving (variety of pathfinding methods)
     [-] BFS
     [-] DFS
