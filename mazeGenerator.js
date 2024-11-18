@@ -147,5 +147,6 @@ function drawCellDot(cell, rgbColor) {
     ctx.fillStyle = rgbColor;
     ctx.fill()
     ctx.strokeStyle = rgbColor;
+    
     ctx.stroke();
 }
