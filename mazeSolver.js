@@ -3,7 +3,7 @@
  * @author TimMagwood <timothy.magwood@gmail.com>
  *
  * Created:     2024-11-12
- * Modified:    2024-11-17
+ * Modified:    2024-11-18
  */
 
 // const { grid, canvasSize, gridSize, start, end } = require('./mazeGenerator.js');
@@ -54,21 +54,23 @@ function dfs(x, y) {
     grid[x][y].visited = true;
     drawCellDot(grid[x][y], '#ff000080');
 
-    for (let [dx, dy] of DIRECTIONS) {
-        const nx = x + dx;
-        const ny = y + dy;
+    //setTimeout(() => {
+        for (let [dx, dy] of DIRECTIONS) {
+            const nx = x + dx;
+            const ny = y + dy;
 
-        if(nx >= 0 && ny >= 0 && nx < grid.length && ny < grid.length && !grid[nx][ny].visited) {
-            if(isValidMove(grid[x][y], grid[nx][ny])) {
-                if (dfs(nx, ny)) {
-                    path.push(grid[nx][ny])
-                    return true;
-                } else {
-                    path.pop();
+            if(nx >= 0 && ny >= 0 && nx < grid.length && ny < grid.length && !grid[nx][ny].visited) {
+                if(isValidMove(grid[x][y], grid[nx][ny])) {
+                    if (dfs(nx, ny)) {
+                        path.push(grid[nx][ny])
+                        return true;
+                    } else {
+                        path.pop();
+                    }
                 }
             }
         }
-    }
+    //}, 50);
 
     return false; // No valid path
 }
