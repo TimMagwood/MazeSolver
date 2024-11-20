@@ -7,6 +7,10 @@
  */
 
 const canvas = document.getElementById("mazeCanvas");
+canvas.addEventListener('mousedown', function(e) {
+    getCursorPosition(canvas, e)
+})
+
 const mazeStatus = document.getElementById("mazeStatus");
 const ctx = canvas.getContext("2d");
 
@@ -19,11 +23,13 @@ const gridSize = 20;
 const cellSize = canvasSize / gridSize;
 
 let start;
+let setStartFlag;
 let end;
+let setEndFlag;
 
 document.getElementById("generateMaze").addEventListener("click", createMaze);
-document.getElementById("changeStart").addEventListener("click", changeStart);
-document.getElementById("changeEnd").addEventListener("click", changeEnd);
+document.getElementById("changeStart").addEventListener("click", function() {setStartFlag = true;});
+document.getElementById("changeEnd").addEventListener("click", function() {setEndFlag = true;});
 
 /**
  * Creates a maze based on specified grid/canvas size.
@@ -123,9 +129,9 @@ function removeWall(current, next) {
 function drawMaze() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#000000';
-    for (let y = 0; y < gridSize; y++) {
-        for (let x = 0; x < gridSize; x++) {
-          let cell = grid[y][x];
+    for (let x = 0; x < gridSize; y++) {
+        for (let y = 0; y < gridSize; x++) {
+          let cell = grid[x][y];
           let xPos = x * cellSize;
           let yPos = y * cellSize;
     
@@ -141,16 +147,45 @@ function drawMaze() {
 }
 
 /**
+ * Gets the cursor position on the canvas when a user clicks it
+ * @param canvas The maze canvas that the user is clicking on
+ * @param event The mouse click event
+ */
+function getCursorPosition(canvas, event) {
+    const rect = canvas.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+    console.log("x: " + x + " y: " + y)
+    if (setStartFlag) {
+        // Clean current fill from start point
+        // Set new start point to clicked location
+        start = grid[Math.floor(x / cellSize)][Math.floor(y / cellSize)];
+        // Draw fill on new location
+        shadeCell(start, '#00ff0080');
+        // Reset flag
+        setStartFlag = false;
+    } else if (setEndFlag) {
+        // Clean current fill from end point
+        // Set new end point to clicked location
+        end = grid[Math.floor(x / cellSize)][Math.floor(y / cellSize)];
+        // Draw fill on new location
+        shadeCell(end, '#ff000080');
+        // Reset flag
+        setEndFlag = false;
+    }
+}
+
+/**
  * Allows the user to click a spot on the grid to set as the new start point
  */
 function changeStart() {
-
+    setStartFlag = true;
 }
 
 /**
  * Allows the user to click a spot on the grid to set as the new end point
  */
-function changeStart() {
+function changeEnd() {
 
 }
 
