@@ -3,40 +3,31 @@
  * @author TimMagwood <timothy.magwood@gmail.com>
  *
  * Created:     2024-11-12
- * Modified:    2024-11-16
+ * Modified:    2024-11-18
  */
 
 // const { grid, canvasSize, gridSize, start, end } = require('./mazeGenerator.js');
 
 document.getElementById("solveMaze").addEventListener("click", solveMaze);
 
+const DIRECTIONS = [
+    [-1, 0], // Up
+    [0, 1], // Right
+    [1, 0], // Down
+    [0, -1] // Left
+]
+
 /**
  * Finds a path from the start point to the end point in the maze.
  */
 function solveMaze() {
     const mazeStatus =  document.getElementById("mazeStatus");
-    mazeStatus.innerText = "solving...";
+    mazeStatus.innerText = "Solving...";
     path = [];
-    // Starting with depth-first search
-    function dfs(x, y) {
-        if(x == end.x && y == end.y) {
-            mazeStatus.innerText = "Found path to end.";
-            // TODO Add dot every time we visit a cell so that we can follow along
-            path.push([x, y]);
-            return true;
-        }
 
-        // TODO Make sure grid is actually coming in correctly
-        // TODO Check that this is validating correctly...
-        if(!isValidMove(grid, visited, x, y)) {
-            return false;
-        }
-
-        // TODO Check all directions re-calling dfs()
-
-        // Remove recents cell if it doesn't lead to solution
-        path.pop();
-        return false;
+    // Reset all cells visited state to false
+    for(let i = 0; i < grid.length; i++) {
+        grid[i].forEach((cell) => cell.visited = false);
     }
 
     // Call the solve method from the start point
@@ -46,20 +37,75 @@ function solveMaze() {
     drawPathToEnd(path.reverse());
 }
 
-function isValidMove(grid, visited, x, col) {
-    return x >= 0 &&
-        x < grid.length &&
-        y >= 0 &&
-        y < grid[0].length &&
-        grid[x][y] === 1 &&
-        !visited[x][y];
-  }
+/**
+ * Performs a search on neighboring cells to check for a valid path.
+ * Uses the Depth-First-Search pathfinding algorithm
+ * Returns once pathfinder reaches end OR when it is determined that no solution exists.
+ * @param {number} x Cell row value.
+ * @param {number} y Cell column value.
+ * @returns {boolean} True if valid path is found, False if not.
+ */
+function dfs(x, y) {
+    if(x == end.x && y == end.y) {
+        mazeStatus.innerText = "Found path to end.";
+        return true;
+    }
+    
+    grid[x][y].visited = true;
+    drawCellDot(grid[x][y], '#ff000080');
+    
+    for (let [dx, dy] of DIRECTIONS) {
+        const nx = x + dx;
+        const ny = y + dy;
+
+            if(nx >= 0 && ny >= 0 && nx < grid.length && ny < grid.length && !grid[nx][ny].visited) {
+                if(isValidMove(grid[x][y], grid[nx][ny])) {
+                    if (dfs(nx, ny)) {
+                        path.push(grid[nx][ny])
+                        return true;
+                    } else {
+                        path.pop();
+                    }
+                }
+            }
+        }
+
+    return false; // No valid path
+}
+
+/**
+ * Checks if a move can be made between two given cells.
+ * @param {number} currCell Current cell.
+ * @param {number} nextCell Next cell.
+ * @returns {boolean} True if move is valid, False if not.
+ */
+function isValidMove(currCell, nextCell) {
+
+    const[x1, y1] = [currCell.x, currCell.y];
+    const[x2, y2] = [nextCell.x, nextCell.y];
+
+    if (x1 == x2) { // We are in the same row
+        if (y2 > y1) {
+            return !currCell.walls[2]; // Check if there is a wall below
+        } else {
+            return !currCell.walls[0]; // Check if there is a wall above
+        }
+    } else if (y1 == y2) {
+        if (x2 > x1) {
+            return !currCell.walls[1]; // Check if there is a wall right
+        } else {
+            return !currCell.walls[3]; // Check if there is a wall left
+        }
+    }
+    return false; // Otherwise, its an invalid move
+}
 
 /**
  * Draws the path from start point to end point.
  * @param path An array of indexes that contain the path from the start to the end.
  */
 function drawPathToEnd(path) {
-
-    mazeStatus.innerText += "Maze Solved!";
+    path.unshift(start);
+    path.forEach((cell) => drawCellDot(cell, '#00ff0080'));
+    mazeStatus.innerText += " Maze Solved!";
 }
