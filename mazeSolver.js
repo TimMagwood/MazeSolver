@@ -22,7 +22,7 @@ const DIRECTIONS = [
  */
 function solveMaze() {
     const mazeStatus =  document.getElementById("mazeStatus");
-    mazeStatus.innerText = "solving...";
+    mazeStatus.innerText = "Solving...";
     path = [];
 
     // Reset all cells visited state to false
@@ -53,11 +53,10 @@ function dfs(x, y) {
     
     grid[x][y].visited = true;
     drawCellDot(grid[x][y], '#ff000080');
-
-    //setTimeout(() => {
-        for (let [dx, dy] of DIRECTIONS) {
-            const nx = x + dx;
-            const ny = y + dy;
+    
+    for (let [dx, dy] of DIRECTIONS) {
+        const nx = x + dx;
+        const ny = y + dy;
 
             if(nx >= 0 && ny >= 0 && nx < grid.length && ny < grid.length && !grid[nx][ny].visited) {
                 if(isValidMove(grid[x][y], grid[nx][ny])) {
@@ -70,7 +69,6 @@ function dfs(x, y) {
                 }
             }
         }
-    //}, 50);
 
     return false; // No valid path
 }
@@ -107,6 +105,7 @@ function isValidMove(currCell, nextCell) {
  * @param path An array of indexes that contain the path from the start to the end.
  */
 function drawPathToEnd(path) {
+    path.unshift(start);
     path.forEach((cell) => drawCellDot(cell, '#00ff0080'));
     mazeStatus.innerText += " Maze Solved!";
 }

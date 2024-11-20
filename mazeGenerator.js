@@ -22,6 +22,8 @@ let start;
 let end;
 
 document.getElementById("generateMaze").addEventListener("click", createMaze);
+document.getElementById("changeStart").addEventListener("click", changeStart);
+document.getElementById("changeEnd").addEventListener("click", changeEnd);
 
 /**
  * Creates a maze based on specified grid/canvas size.
@@ -64,8 +66,8 @@ function createMaze() {
     }
 
     drawMaze();
-    drawCellDot(start, '#ff000080');
-    drawCellDot(end, '#0000ff80');
+    shadeCell(start, '#00ff0080');
+    shadeCell(end, '#ff000080');
 }
 
 /**
@@ -138,12 +140,34 @@ function drawMaze() {
     }
 }
 
+/**
+ * Allows the user to click a spot on the grid to set as the new start point
+ */
+function changeStart() {
+
+}
+
+/**
+ * Allows the user to click a spot on the grid to set as the new end point
+ */
+function changeStart() {
+
+}
 
 function drawCellDot(cell, rgbColor) {
     ctx.beginPath();
     let drawX = (cell.x * cellSize) + (cellSize / 2);
     let drawY = (cell.y * cellSize) + (cellSize / 2);
     ctx.arc(drawX, drawY, cellSize * 0.1, 0, 2 * Math.PI);
+    ctx.fillStyle = rgbColor;
+    ctx.fill()
+    ctx.strokeStyle = rgbColor;
+    ctx.stroke();
+}
+
+function shadeCell(cell, rgbColor) {
+    ctx.beginPath();
+    ctx.rect(cell.x * cellSize + 1, cell.y * cellSize + 1, cellSize - 2, cellSize - 2);
     ctx.fillStyle = rgbColor;
     ctx.fill()
     ctx.strokeStyle = rgbColor;
