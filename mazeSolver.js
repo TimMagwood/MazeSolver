@@ -31,7 +31,7 @@ function solveMaze() {
     }
 
     // Call the solve method from the start point
-    dfs(start.x, start.y);
+    dfs(start.y, start.x);
 
     // Send the reversed path so that we can draw it
     drawPathToEnd(path.reverse());
@@ -46,7 +46,7 @@ function solveMaze() {
  * @returns {boolean} True if valid path is found, False if not.
  */
 function dfs(x, y) {
-    if(x == end.x && y == end.y) {
+    if(x == end.y && y == end.x) {
         mazeStatus.innerText = "Found path to end.";
         return true;
     }

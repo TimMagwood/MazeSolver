@@ -7,6 +7,10 @@
  */
 
 const canvas = document.getElementById("mazeCanvas");
+canvas.addEventListener('mousedown', function(e) {
+    getCursorPosition(canvas, e)
+})
+
 const mazeStatus = document.getElementById("mazeStatus");
 const ctx = canvas.getContext("2d");
 
@@ -19,11 +23,13 @@ const gridSize = 20;
 const cellSize = canvasSize / gridSize;
 
 let start;
+let setStartFlag;
 let end;
+let setEndFlag;
 
 document.getElementById("generateMaze").addEventListener("click", createMaze);
-document.getElementById("changeStart").addEventListener("click", changeStart);
-document.getElementById("changeEnd").addEventListener("click", changeEnd);
+document.getElementById("changeStart").addEventListener("click", function() {setStartFlag = true;});
+document.getElementById("changeEnd").addEventListener("click", function() {setEndFlag = true;});
 
 /**
  * Creates a maze based on specified grid/canvas size.
@@ -141,17 +147,34 @@ function drawMaze() {
 }
 
 /**
- * Allows the user to click a spot on the grid to set as the new start point
+ * Gets the cursor position on the canvas when a user clicks it
+ * @param canvas The maze canvas that the user is clicking on
+ * @param event The mouse click event
  */
-function changeStart() {
-
-}
-
-/**
- * Allows the user to click a spot on the grid to set as the new end point
- */
-function changeStart() {
-
+function getCursorPosition(canvas, event) {
+    const rect = canvas.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+    console.log("x: " + x + " y: " + y)
+    if (setStartFlag) {
+        // Clean current fill from start point
+        shadeCell(start, '#ffffff');
+        // Set new start point to clicked location
+        start = grid[Math.floor(y / cellSize)][Math.floor(x / cellSize)];
+        // Draw fill on new location
+        shadeCell(start, '#00ff0080');
+        // Reset flag
+        setStartFlag = false;
+    } else if (setEndFlag) {
+        // Clean current fill from end point
+        shadeCell(end, '#ffffff');
+        // Set new end point to clicked location
+        end = grid[Math.floor(y / cellSize)][Math.floor(x / cellSize)];
+        // Draw fill on new location
+        shadeCell(end, '#ff000080');
+        // Reset flag
+        setEndFlag = false;
+    }
 }
 
 function drawCellDot(cell, rgbColor) {
@@ -167,9 +190,8 @@ function drawCellDot(cell, rgbColor) {
 
 function shadeCell(cell, rgbColor) {
     ctx.beginPath();
-    ctx.rect(cell.x * cellSize + 1, cell.y * cellSize + 1, cellSize - 2, cellSize - 2);
     ctx.fillStyle = rgbColor;
-    ctx.fill()
+    ctx.fillRect(cell.x * cellSize + 2, cell.y * cellSize + 2, cellSize - 4, cellSize - 4);
     ctx.strokeStyle = rgbColor;
     ctx.stroke();
 }
