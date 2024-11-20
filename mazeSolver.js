@@ -3,10 +3,8 @@
  * @author TimMagwood <timothy.magwood@gmail.com>
  *
  * Created:     2024-11-12
- * Modified:    2024-11-18
+ * Modified:    2024-11-20
  */
-
-// const { grid, canvasSize, gridSize, start, end } = require('./mazeGenerator.js');
 
 document.getElementById("solveMaze").addEventListener("click", solveMaze);
 
@@ -30,8 +28,18 @@ function solveMaze() {
         grid[i].forEach((cell) => cell.visited = false);
     }
 
+    let solveMethod = Array.from(document.getElementsByName("solveMethod")).find(r => r.checked).value;
+
     // Call the solve method from the start point
-    dfs(start.y, start.x);
+    switch(solveMethod) {
+        case 'bfsSolve':
+            break;
+        case 'dfsSolve':
+            dfs(start.y, start.x);
+            break;
+        default:
+            break;
+    }
 
     // Send the reversed path so that we can draw it
     drawPathToEnd(path.reverse());
@@ -47,7 +55,7 @@ function solveMaze() {
  */
 function dfs(x, y) {
     if(x == end.y && y == end.x) {
-        mazeStatus.innerText = "Found path to end.";
+        mazeStatus.innerText = 'Found path to end.';
         return true;
     }
     
@@ -105,7 +113,12 @@ function isValidMove(currCell, nextCell) {
  * @param path An array of indexes that contain the path from the start to the end.
  */
 function drawPathToEnd(path) {
-    path.unshift(start);
-    path.forEach((cell) => drawCellDot(cell, '#00ff0080'));
-    mazeStatus.innerText += " Maze Solved!";
+    if (path == undefined || path.length == 0) {
+        mazeStatus.innerText = 'Could not find solution to maze.';
+    } else {
+        path.unshift(start);
+        path.forEach((cell) => drawCellDot(cell, '#00ff0080'));
+        mazeStatus.innerText += ' Maze Solved!';
+    }
+    
 }
