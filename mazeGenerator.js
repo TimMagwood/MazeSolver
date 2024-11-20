@@ -129,9 +129,9 @@ function removeWall(current, next) {
 function drawMaze() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#000000';
-    for (let x = 0; x < gridSize; y++) {
-        for (let y = 0; y < gridSize; x++) {
-          let cell = grid[x][y];
+    for (let y = 0; y < gridSize; y++) {
+        for (let x = 0; x < gridSize; x++) {
+          let cell = grid[y][x];
           let xPos = x * cellSize;
           let yPos = y * cellSize;
     
@@ -158,35 +158,23 @@ function getCursorPosition(canvas, event) {
     console.log("x: " + x + " y: " + y)
     if (setStartFlag) {
         // Clean current fill from start point
+        shadeCell(start, '#ffffff');
         // Set new start point to clicked location
-        start = grid[Math.floor(x / cellSize)][Math.floor(y / cellSize)];
+        start = grid[Math.floor(y / cellSize)][Math.floor(x / cellSize)];
         // Draw fill on new location
         shadeCell(start, '#00ff0080');
         // Reset flag
         setStartFlag = false;
     } else if (setEndFlag) {
         // Clean current fill from end point
+        shadeCell(end, '#ffffff');
         // Set new end point to clicked location
-        end = grid[Math.floor(x / cellSize)][Math.floor(y / cellSize)];
+        end = grid[Math.floor(y / cellSize)][Math.floor(x / cellSize)];
         // Draw fill on new location
         shadeCell(end, '#ff000080');
         // Reset flag
         setEndFlag = false;
     }
-}
-
-/**
- * Allows the user to click a spot on the grid to set as the new start point
- */
-function changeStart() {
-    setStartFlag = true;
-}
-
-/**
- * Allows the user to click a spot on the grid to set as the new end point
- */
-function changeEnd() {
-
 }
 
 function drawCellDot(cell, rgbColor) {
@@ -202,9 +190,8 @@ function drawCellDot(cell, rgbColor) {
 
 function shadeCell(cell, rgbColor) {
     ctx.beginPath();
-    ctx.rect(cell.x * cellSize + 1, cell.y * cellSize + 1, cellSize - 2, cellSize - 2);
     ctx.fillStyle = rgbColor;
-    ctx.fill()
+    ctx.fillRect(cell.x * cellSize + 2, cell.y * cellSize + 2, cellSize - 4, cellSize - 4);
     ctx.strokeStyle = rgbColor;
     ctx.stroke();
 }
